@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <title>Recetas</title>
+
+
+    <script src="js/jspdf.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+  </head>
+  <body>
+
+    <div>
+        <div style="width: 40%; padding-left: 25px;">
+        <form>
+            <div class="mb-3">
+              <label for="fecha" class="form-label">Fecha</label>
+              <input type="text" class="form-control" id="fecha" 
+            </div>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre del paciente</label>
+                <input type="text" class="form-control" id="nombre"
+            </div>
+            <div class="mb-3">
+                <label for="padecimiento class="form-label">Padecimiento</label>
+                <input type="text" class="form-control" id="padecimiento"
+            </div>
+            <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <input type="text" class="form-control" id="descripcion"
+            </div>
+            <button onclick="BotonImpresion()" type="submit" class="btn btn-outline-dark">Imprimir</button>
+            <button onclick="BotonGuardar()" type="submit" class="btn btn-outline-dark">Guardar en el sistema</button>
+            <a class="btn btn-outline-dark" href="ModuloDoc.html">Regresar</a>
+          </form>
+        </div>
+    </div>
+
+
+<script>
+    function BotonImpresion() {
+
+      event.preventDefault();
+      
+    var doc = new jsPDF({
+      orientation: 'portrait'
+    });
+
+  var fecha1 = document.getElementById('fecha').value,
+      nombre1 = document.getElementById('nombre').value,
+      padecimiento1 = document.getElementById('padecimiento').value,
+      descripcion1 = document.getElementById('descripcion').value;
+      padecimiento1 = document.getElementById('padecimiento').value,
+      descripcion1 = document.getElementById('descripcion').value;
+
+  doc.setFontSize(24);
+  doc.text(80, 20, 'Receta medica');
+  doc.setFontSize(12);
+  doc.text(  'Fecha: ' + fecha1 ,20, 30);
+  doc.text(   'Nombre del paciente: ' + nombre1 ,20, 40);
+  doc.text(   'Padecimiento: ' + padecimiento1 ,20, 50);
+  doc.text(   'Descripción: ' + descripcion1, 20, 60);
+
+  doc.save('Receta.pdf');
+}
+
+
+
+
+    function BotonGuardar() {
+      event.preventDefault();
+
+var fecha =  document.querySelector('#fecha').value
+var nombre =  document.querySelector('#nombre').value
+var padecimiento = document.querySelector('#padecimiento').value
+var descripcion = document.querySelector('#descripcion').value
+
+
+var objeto = {
+    'fecharec': fecha,
+    'pacienterec': nombre,
+    'padecimientorec': padecimiento,
+    'descripcionrec': descripcion,
+}
+console.log(objeto)
+
+fetch(`https://backend-202000343.herokuapp.com/Recetas`, {
+       
+    method: 'POST',
+    body: JSON.stringify(objeto),
+   
+    headers:{
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',}})
+.then(res => res.json())
+.catch(err => {
+        console.error('Error:', err)
+        alert("Ocurrio un error en put , ver la consola")
+})
+.then(response =>{
+  console.log(response);
+  
+  alert(response.Mensaje)       
+})        
+
+
+
+    }
+
+</script>
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+    -->
+
+
+
+
+
+  </body>
+
+
+  </html>

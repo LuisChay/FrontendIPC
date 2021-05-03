@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <title>Modificar Perfil Doctor</title>
+  </head>
+  <body onload="ObtenerDatos()">
+
+    <div>
+        <div style="width: 40%; padding-left: 25px;">
+        <form>
+            <div class="mb-3">
+              <label for="Nombredoc" class="form-label">Nombre </label>
+              <input type="text" class="form-control" id="Nombredoc" 
+            </div>
+            <div class="mb-3">
+                <label for="Apellido" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="Apellido"
+            </div>
+            <div class="mb-3">
+                <label for="Fecha" class="form-label">Fecha de nacimiento </label>
+                <input type="text" class="form-control" id="Fecha" 
+              </div>
+              <div class="mb-3">
+                  <label for="Sexo" class="form-label">Sexo</label>
+                  <input type="text" class="form-control" id="Sexo"
+              </div>
+              <div class="mb-3">
+                <label for="Usuario" class="form-label">Nombre de usuario</label>
+                <input type="text" class="form-control" id="Usuario" 
+              </div>
+              <div class="mb-3">
+                  <label for="Contrasena" class="form-label">Contraseña</label>
+                  <input type="text" class="form-control" id="Contrasena"
+              </div>
+              <div class="mb-3">
+                <label for="Especialidad" class="form-label">Telefono</label>
+                <input type="text" class="form-control" id="Especialidad"
+            </div>
+              <div class="mb-3">
+                <label for="Telefono" class="form-label">Especialidad</label>
+                <input type="text" class="form-control" id="Telefono"
+            </div>
+
+              <button onclick="GuardarDatos()" type="submit" class="btn btn-outline-dark">Guardar cambios</button>
+              <a class="btn btn-outline-dark" href="AdminCarga.html">Regresar</a>
+          </form>
+        </div>
+    </div>
+
+
+<script>
+    function ObtenerDatos(){ 
+            var usuario1 = sessionStorage.buscardoc   
+            alert(usuario1)   
+            fetch(`https://backend-202000343.herokuapp.com/Doctores/${usuario1}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',}})
+            .then(res => res.json())
+            .catch(err => {
+                console.error('Error:', err)
+                alert("Ocurrio un error, ver la consola")
+            })
+            .then(response =>{
+                console.log(response)
+                document.querySelector('#Nombredoc').value = response.Nombre
+                document.querySelector('#Apellido').value = response.Apellido
+                document.querySelector('#Fecha').value = response.Fecha
+                document.querySelector('#Sexo').value = response.Sexo
+                document.querySelector('#Usuario').value = usuario1
+                document.querySelector('#Contrasena').value = response.Contrasena
+                document.querySelector('#Telefono').value = response.Telefono
+                document.querySelector('#Especialidad').value = response.Especialidad
+            })
+        }
+
+   function GuardarDatos(){
+    
+    event.preventDefault();
+  
+  var nombre =  document.querySelector('#Nombredoc').value
+  var apellido =  document.querySelector('#Apellido').value
+  var fecha = document.querySelector('#Fecha').value
+  var sexo = document.querySelector('#Sexo').value
+  var usuario = document.querySelector('#Usuario').value
+  var contraseña = document.querySelector('#Contrasena').value
+  var especialidad = document.querySelector('#Especialidad').value
+  var telefono = document.querySelector('#Telefono').value
+  
+  var objeto = {
+      'Nombredoc': nombre,
+      'Apellido': apellido,
+      'Fecha': fecha,
+      'Sexo': sexo,
+      'Usuario': usuario,
+      'Contrasena': contraseña,
+      'Especialidad': especialidad,
+      'Telefono': telefono,
+  }
+  console.log(objeto)
+  
+  fetch(`https://backend-202000343.herokuapp.com/Doctores/${usuario}`, {
+         
+      method: 'PUT',
+      body: JSON.stringify(objeto),
+     
+      headers:{
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',}})
+  .then(res => res.json())
+  .catch(err => {
+          console.error('Error:', err)
+          alert("Ocurrio un error en put doc, ver la consola")
+  })
+  .then(response =>{
+    console.log(response);
+    
+    alert(response.Mensaje)       
+  })        
+  
+  
+  
+  }
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+    -->
+
+
+
+
+
+  </body>
+
+
+  </html>
